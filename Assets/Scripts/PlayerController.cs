@@ -3,15 +3,31 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
+    [Space(10)]
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float shootSpeed = 1f;
-    [SerializeField] private float cannonRotateSpeed = 100f;
     [SerializeField] private float rotationSpeed = 5f;
+    
+    [Header("Shoot")]
+    [Space(10)]
+    [SerializeField] private float shootSpeed = 1f;
+    [Header("Bullet")]
+    [Space(5)]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawnPoint;
+    
+    [Header("Rotation of the cannon")]
+    [Space(10)]
+    [SerializeField] private float cannonRotateSpeed = 100f;
+    [SerializeField] float mouseScale = 0.03f;   // réduit la souris
+    [SerializeField] float stickScale = 3f;
+    
+    [Header("Tank parts")]
+    [Space(10)]
     [SerializeField] private GameObject tankTower;
     [SerializeField] private GameObject tankBody;
     
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawnPoint;
+  
     
     private float horizontalAngle = 0f;
     private float verticalAngle = 0f;
@@ -52,10 +68,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        lookInput = context.ReadValue<Vector2>();
-        
-        horizontalAngle += lookInput.x * cannonRotateSpeed * Time.deltaTime;
-        verticalAngle   += -lookInput.y * cannonRotateSpeed * Time.deltaTime;
+        Vector2 input = context.ReadValue<Vector2>();
+
+        float scale = context.control.device is Mouse ? mouseScale : stickScale;
+
+        Vector2 look = input * scale;
+
+        horizontalAngle += look.x * cannonRotateSpeed * Time.deltaTime;
+        verticalAngle   += -look.y * cannonRotateSpeed * Time.deltaTime;
 
         verticalAngle = Mathf.Clamp(verticalAngle, -15f, 7.5f);
     }

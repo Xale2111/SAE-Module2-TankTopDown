@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
-        //Time.timeScale = 1f;
+        isPaused = false;
+        Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 
@@ -29,7 +31,7 @@ public class PauseMenu : MonoBehaviour
 
     private void PauseGame()
     {
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true; 
@@ -37,23 +39,22 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        
+        SceneManager.LoadScene(0);
     }
 
     public void QuitGame()
     {
-        
+        Application.Quit();
     }
 
     public void GoToSettings()
     {
-        
+        SceneManager.LoadScene(2);
     }
     
     public void TogglePause()
     {
         isPaused = !isPaused;
-        Debug.Log(isPaused);
         if (isPaused) PauseGame(); else ResumeGame();
     }
 }
