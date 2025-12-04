@@ -6,6 +6,7 @@ public class Tower : MonoBehaviour
 {
     [SerializeField] private float _range = 10f;
     [SerializeField] private float _rotateSpeed = 2.5f;
+    [SerializeField] private float _idleRotateSpeed = 20f;
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private Transform _playerPosition;
     [SerializeField] private Transform _cannonBase;
@@ -13,7 +14,11 @@ public class Tower : MonoBehaviour
     [SerializeField] private LayerMask _layer;
 
     [SerializeField] private float _dps = 1f;
-    
+
+    [SerializeField] private Transform _laserStartPosition;
+    [SerializeField] private LineRenderer _laser;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,6 +26,7 @@ public class Tower : MonoBehaviour
         {
             _playerPosition = GameObject.FindWithTag("Player").transform;
         }
+
     }
 
     // Update is called once per frame
@@ -51,8 +57,10 @@ public class Tower : MonoBehaviour
             else
             {
                 StopCoroutine(ShootSequence_co());
-                barrelRotation = Quaternion.Lerp(_cannonBarrel.rotation, Quaternion.LookRotation(Vector3.zero),
-                    Time.deltaTime * _rotateSpeed / 10);
+                _cannonBarrel.Rotate(0f,_idleRotateSpeed*Time.deltaTime,0f);
+                Quaternion targetBarrelRotation = Quaternion.Euler(0f, _cannonBarrel.eulerAngles.y, 0f);
+
+                barrelRotation = Quaternion.Lerp(_cannonBarrel.rotation, targetBarrelRotation, Time.deltaTime * (_rotateSpeed / 10f));
             }
             
             baseRotation = barrelRotation;
@@ -75,13 +83,17 @@ public class Tower : MonoBehaviour
         {
             if (hit.collider.gameObject.TryGetComponent(out DamageTaker damageTaker))
             {
-                damageTaker.TakeDamage(_dps*Time.deltaTime);
-                Debug.DrawLine(_cannonBarrel.position, _cannonBarrel.forward*_range, Color.green, 0.25f);
+                damageTaker.TakeDamages(_dps * Time.deltaTime);
+                _laser.enabled = true;
+                _laser.SetPosition(0, _laserStartPosition.position);
+                _laser.SetPosition(_laser.positionCount - 1, hit.point);
+                Debug.DrawLine(_cannonBarrel.position, _cannonBarrel.forward * _range, Color.green, 0.25f);
             }
         }
         else
         {
-            Debug.DrawLine(_cannonBarrel.position, _cannonBarrel.forward*_range, Color.red);
+            Debug.DrawLine(_cannonBarrel.position, _cannonBarrel.forward * _range, Color.red);
+            _laser.enabled = false;
         }
     }
 
@@ -92,14 +104,15 @@ public class Tower : MonoBehaviour
             DoLaserShoot();
             yield return new WaitForSeconds(_fireRate);
         } while (true);
-        
+
     }
 
     private void OnDrawGizmos()
     {
         // Set the color with custom alpha.
         Gizmos.color = new Color(1f, 0f, 0f); // Red with custom alpha
-        
+
         Gizmos.DrawWireSphere(transform.position, _range);
     }
 }
+

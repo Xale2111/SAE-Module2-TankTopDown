@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -11,10 +12,15 @@ public class PlayerController : MonoBehaviour
     [Header("Shoot")]
     [Space(10)]
     [SerializeField] private float shootSpeed = 1f;
+    [Header("Particles")]
+    [Space(5)]
+    [SerializeField] private ParticleSystem _flash;
+    [SerializeField] private ParticleSystem _smokeCannon;
     [Header("Bullet")]
     [Space(5)]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
+    [SerializeField] private UnityEvent _OnShoot;
     
     [Header("Rotation of the cannon")]
     [Space(10)]
@@ -85,6 +91,9 @@ public class PlayerController : MonoBehaviour
         if (context.performed && shootingDelay >= shootSpeed)
         {
             Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            _OnShoot.Invoke();
+            _flash.Play();
+            _smokeCannon.Play();
             shootingDelay = 0f;
         }
     }

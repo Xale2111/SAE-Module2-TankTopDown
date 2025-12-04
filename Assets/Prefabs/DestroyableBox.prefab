@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 8051571869416040767}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.79, y: 0.19, z: 5.36}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -55,7 +55,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 0.4, z: 0.4}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!114 &3130690919657409611
 MonoBehaviour:
@@ -69,11 +69,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c04e531404b1043b47af618b15d01f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _capForce: 25
-  _boxForce: 15
+  _capForce: 150
+  _boxForce: 150
   _capRb: {fileID: 1673551405658406957}
   _boxRb: {fileID: 6040587416184116381}
-  _boxCollider: {fileID: 3924285066589978713}
+  _explosion: {fileID: 8805038888406746310, guid: 4f1529a753e4c0b4d9e8a4b9c4cc3b4e, type: 3}
+  _onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1456606567642669540
 MonoBehaviour:
   m_ObjectHideFlags: 0

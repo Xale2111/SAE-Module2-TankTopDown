@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-     [SerializeField] private float _forceIntensity = 50f;
-     [SerializeField] private float _damage = 50f;
+        [SerializeField] private float _forceIntensity = 50f;
+        [SerializeField] private float _damage = 50f;
     
+        [SerializeField] private GameObject _impact;
         private Rigidbody _rb;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,6 +15,7 @@ public class Bullet : MonoBehaviour
             if (_rb)
             {
                 _rb.AddRelativeForce(Vector3.forward * _forceIntensity, ForceMode.VelocityChange);
+                Destroy(gameObject, 30f);
             }
         }
     
@@ -31,15 +33,18 @@ public class Bullet : MonoBehaviour
 
         private void OnTouch(GameObject touchObject)
         {
-            if (touchObject.TryGetComponent(out DestroyableBox destroyableBox))
+            if (touchObject.TryGetComponent(out DestroyableBox box))
             {
-                destroyableBox.SetProjectile(transform.position);
+                box.SetProjectilePosition(transform.position);
             }
-            
+        
             if (touchObject.TryGetComponent(out DamageTaker damageTaker))
             {
-                damageTaker.TakeDamage(_damage);
+                damageTaker.TakeDamages(_damage);
             }
+            
+            Instantiate(_impact,transform.position, Quaternion.identity);
+            
             Destroy(gameObject);
         }
 }
