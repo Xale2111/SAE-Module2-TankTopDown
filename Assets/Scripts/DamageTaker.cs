@@ -27,7 +27,10 @@ public class DamageTaker : MonoBehaviour
                 enabled = false;
             }
         }
-        
     }
-    
+    public int GetHP()
+    {
+        return Mathf.CeilToInt(_hp);
+    }
+
 }

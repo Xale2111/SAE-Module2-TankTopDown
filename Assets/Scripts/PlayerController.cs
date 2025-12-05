@@ -97,4 +97,10 @@ public class PlayerController : MonoBehaviour
             shootingDelay = 0f;
         }
     }
+
+    public void PlayerDeath()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true; 
+    }
 }

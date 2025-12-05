@@ -21,14 +21,20 @@ public class Bullet : MonoBehaviour
     
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("Bullet hit something, a real and solid collider : " + collision.gameObject.name);
-            OnTouch(collision.gameObject);
+            if (collision.gameObject.layer != LayerMask.NameToLayer("Ignore Bullet"))
+            {
+                Debug.Log("Bullet hit something, a real and solid collider : " + collision.gameObject.name);
+                OnTouch(collision.gameObject);   
+            }
         }
     
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Bullet hit something, a trigger : " + other.gameObject.name);
-            OnTouch(other.gameObject);
+            if (other.gameObject.layer != LayerMask.NameToLayer("Ignore Bullet"))
+            {
+                Debug.Log("Bullet hit something, a trigger : " + other.gameObject.name);
+                OnTouch(other.gameObject);
+            }
         }
 
         private void OnTouch(GameObject touchObject)
